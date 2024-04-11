@@ -1,24 +1,35 @@
 #include "sort.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 /**
- * print_array - Prints an array of integers
- *
- * @array: The array to be printed
- * @size: Number of elements in @array
+ * insertion_sort_list - perform insertion sort on a linked list
+ * @list: head node of the linked list
  */
-void print_array(const int *array, size_t size)
+void insertion_sort_list(listint_t **list)
 {
-    size_t i;
+	listint_t *current, *swap, *prv;
 
-    i = 0;
-    while (array && i < size)
-    {
-        if (i > 0)
-            printf(", ");
-        printf("%d", array[i]);
-        ++i;
-    }
-    printf("\n");
+	if (!list || !*list)
+		return;
+
+	current = *list;
+	while ((current = current->next))
+	{
+		swap = current;
+		while (swap->prev && swap->n < swap->prev->n)
+		{
+			prv = swap->prev;
+			if (swap->next)
+				swap->next->prev = prv;
+			if (prv->prev)
+				prv->prev->next = swap;
+			else
+				*list = swap;
+			prv->next = swap->next;
+			swap->prev = prv->prev;
+			swap->next = prv;
+			prv->prev = swap;
+
+			print_list(*list);
+		}
+	}
 }
